@@ -9,11 +9,13 @@
 ## Week 1-2: Foundation & Setup
 
 ### Goals
+
 - Set up development environment with modern tooling
 - Establish project architecture and repository structure
 - Get database running with Docker
 
 ### Tasks
+
 - [ ] Initialize monorepo with pnpm workspaces or Turborepo
 - [ ] Set up React 19 + TypeScript + Vite frontend project
 - [ ] Set up Hono + TypeScript backend project
@@ -27,12 +29,14 @@
 - [ ] Write basic README with setup instructions
 
 ### Learning Focus
+
 - Monorepo structure and tooling
 - Docker basics (images, containers, volumes, compose)
 - TypeScript project configuration
 - Modern code quality tools
 
 ### Deliverable
+
 Working development environment with database running in Docker, empty but structured codebase
 
 ---
@@ -40,11 +44,13 @@ Working development environment with database running in Docker, empty but struc
 ## Week 3-4: Authentication from Scratch
 
 ### Goals
+
 - Build complete JWT-based authentication system
 - Understand password hashing, token security, and session management
 - Implement HTTP-only cookie pattern
 
 ### Tasks
+
 - [ ] Install auth dependencies (bcrypt, jsonwebtoken)
 - [ ] Create user registration endpoint (POST /auth/register)
 - [ ] Implement password hashing with bcrypt (12 rounds)
@@ -65,6 +71,7 @@ Working development environment with database running in Docker, empty but struc
 - [ ] Test complete auth flow end-to-end
 
 ### Learning Focus
+
 - Password hashing and security
 - JWT structure and signing
 - Cookie security (httpOnly, Secure, SameSite)
@@ -73,6 +80,7 @@ Working development environment with database running in Docker, empty but struc
 - Request interceptors
 
 ### Deliverable
+
 Complete authentication system - users can register, login, stay logged in across page refreshes, and logout securely
 
 ---
@@ -80,11 +88,13 @@ Complete authentication system - users can register, login, stay logged in acros
 ## Week 5-6: Core Notes CRUD + Rich Text Editor
 
 ### Goals
+
 - Build complete notes management system
 - Integrate rich text editing
 - Implement proper API design
 
 ### Tasks
+
 - [ ] Design notes database schema (id, user_id, title, content, created_at, updated_at)
 - [ ] Create Drizzle ORM schema definitions
 - [ ] Build notes API endpoints:
@@ -107,6 +117,7 @@ Complete authentication system - users can register, login, stay logged in acros
 - [ ] Build responsive layout (sidebar + editor)
 
 ### Learning Focus
+
 - RESTful API design patterns
 - ORM usage (Drizzle)
 - Request validation with Zod
@@ -116,6 +127,7 @@ Complete authentication system - users can register, login, stay logged in acros
 - Responsive layouts
 
 ### Deliverable
+
 Fully functional note-taking app - create, edit, delete, search, and tag notes with a professional rich text editor
 
 ---
@@ -123,11 +135,13 @@ Fully functional note-taking app - create, edit, delete, search, and tag notes w
 ## Week 7-8: First AI Feature - Summarization & Auto-Tagging
 
 ### Goals
+
 - Integrate Claude API
 - Build first AI-powered features
 - Learn prompt engineering basics
 
 ### Tasks
+
 - [ ] Sign up for Anthropic API and get API key
 - [ ] Set up environment variables for API key
 - [ ] Create AI service module in backend
@@ -150,6 +164,7 @@ Fully functional note-taking app - create, edit, delete, search, and tag notes w
 - [ ] Add usage tracking (token counting)
 
 ### Learning Focus
+
 - API integration and error handling
 - Prompt engineering basics
 - Async state management
@@ -157,6 +172,7 @@ Fully functional note-taking app - create, edit, delete, search, and tag notes w
 - Rate limiting strategies
 
 ### Deliverable
+
 Working AI features - users can summarize long notes and automatically generate relevant tags
 
 ---
@@ -164,11 +180,13 @@ Working AI features - users can summarize long notes and automatically generate 
 ## Week 9-10: Semantic Search + "Chat with Notes" (RAG)
 
 ### Goals
+
 - Implement vector embeddings for semantic search
 - Build RAG (Retrieval-Augmented Generation) pipeline
 - Enable natural language querying of notes
 
 ### Tasks
+
 - [ ] Enable pgvector extension in PostgreSQL
 - [ ] Add embeddings column to notes table (vector type)
 - [ ] Research and choose embedding model (e.g., text-embedding-3-small from OpenAI)
@@ -193,6 +211,7 @@ Working AI features - users can summarize long notes and automatically generate 
 - [ ] Add "Find Related Notes" button in editor
 
 ### Learning Focus
+
 - Vector embeddings and similarity search
 - pgvector usage and performance
 - RAG architecture and implementation
@@ -201,6 +220,7 @@ Working AI features - users can summarize long notes and automatically generate 
 - Citation and source attribution
 
 ### Deliverable
+
 Semantic search that finds notes by meaning, and AI chat that can answer questions about your notes using RAG
 
 ---
@@ -208,11 +228,13 @@ Semantic search that finds notes by meaning, and AI chat that can answer questio
 ## Week 11-12: Production Readiness & Polish
 
 ### Goals
+
 - Prepare app for deployment
 - Add CI/CD pipeline
 - Polish UX and handle edge cases
 
 ### Tasks
+
 - [ ] Set up GitHub Actions for CI:
   - [ ] Run TypeScript type checking
   - [ ] Run ESLint
@@ -245,6 +267,7 @@ Semantic search that finds notes by meaning, and AI chat that can answer questio
 - [ ] (Optional) Add Google OAuth as second login option
 
 ### Learning Focus
+
 - Docker containerization
 - CI/CD pipelines
 - Deployment strategies
@@ -253,6 +276,7 @@ Semantic search that finds notes by meaning, and AI chat that can answer questio
 - UX polish and attention to detail
 
 ### Deliverable
+
 Production-ready application deployed and accessible online, with polished UX and comprehensive documentation
 
 ---
@@ -262,6 +286,7 @@ Production-ready application deployed and accessible online, with polished UX an
 If you have extra time or want to continue developing:
 
 ### Additional Features
+
 - [ ] Real-time collaboration (WebSockets)
 - [ ] Note versioning/history
 - [ ] Export to PDF
@@ -274,6 +299,7 @@ If you have extra time or want to continue developing:
 - [ ] Dark mode toggle
 
 ### Advanced AI Features
+
 - [ ] Writing style improvement
 - [ ] Tone adjustment (formal/casual)
 - [ ] Translation
@@ -282,6 +308,7 @@ If you have extra time or want to continue developing:
 - [ ] Smart reminders based on note content
 
 ### Technical Improvements
+
 - [ ] Add comprehensive test suite (Vitest + React Testing Library)
 - [ ] Implement caching layer (Redis)
 - [ ] Add database migrations system
@@ -295,20 +322,21 @@ If you have extra time or want to continue developing:
 
 ## Key Milestones Summary
 
-| Week | Milestone | Status |
-|------|-----------|--------|
-| 2 | ✅ Development environment ready | |
-| 4 | ✅ Complete auth system working | |
-| 6 | ✅ Full CRUD notes app functional | |
-| 8 | ✅ First AI features live | |
-| 10 | ✅ Semantic search + RAG working | |
-| 12 | ✅ Deployed to production | |
+| Week | Milestone                         | Status |
+| ---- | --------------------------------- | ------ |
+| 2    | ✅ Development environment ready  |        |
+| 4    | ✅ Complete auth system working   |        |
+| 6    | ✅ Full CRUD notes app functional |        |
+| 8    | ✅ First AI features live         |        |
+| 10   | ✅ Semantic search + RAG working  |        |
+| 12   | ✅ Deployed to production         |        |
 
 ---
 
 ## Resources & References
 
 ### Documentation to Reference
+
 - React 19: https://react.dev
 - Hono: https://hono.dev
 - TanStack Query: https://tanstack.com/query
@@ -319,6 +347,7 @@ If you have extra time or want to continue developing:
 - pgvector: https://github.com/pgvector/pgvector
 
 ### Learning Materials
+
 - JWT Best Practices: https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_for_Java_Cheat_Sheet.html
 - Docker for Beginners: https://docker-curriculum.com
 - RAG Architecture: Search "Retrieval-Augmented Generation" on Anthropic docs
@@ -329,11 +358,11 @@ If you have extra time or want to continue developing:
 
 Use this section to track your actual progress:
 
-**Week 1:** Start Date: _____ | Completion: _____ | Notes: _____
+**Week 1:** Start Date: **\_** | Completion: **\_** | Notes: **\_**
 
-**Week 2:** Start Date: _____ | Completion: _____ | Notes: _____
+**Week 2:** Start Date: **\_** | Completion: **\_** | Notes: **\_**
 
-**Week 3:** Start Date: _____ | Completion: _____ | Notes: _____
+**Week 3:** Start Date: **\_** | Completion: **\_** | Notes: **\_**
 
 (Continue for all weeks...)
 
@@ -342,6 +371,7 @@ Use this section to track your actual progress:
 ## Notes & Reflections
 
 Use this space to document:
+
 - Challenges faced and how you solved them
 - Key learnings from each phase
 - Things you'd do differently

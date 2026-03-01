@@ -8,9 +8,9 @@ app.get('/', (c) => {
 })
 
 app.get('/health', (c) => {
-  return c.json({ 
+  return c.json({
     status: 'ok',
-    timestamp: new Date().toISOString() 
+    timestamp: new Date().toISOString(),
   })
 })
 
@@ -19,5 +19,5 @@ console.log(`🚀 Server is running on http://localhost:${port}`)
 
 serve({
   fetch: app.fetch,
-  port
+  port,
 })

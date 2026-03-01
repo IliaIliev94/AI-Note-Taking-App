@@ -92,18 +92,22 @@ Before importing, create these labels in your repository:
 ## Converting to Other Project Management Tools
 
 ### Trello
+
 - Use Trello's CSV import feature
 - Map: Title → Card Name, Description → Card Description, Milestone → List Name
 
 ### Notion
+
 - Import the CSV into a Notion database
 - Set up different views for each milestone
 
 ### Linear
+
 - Use Linear's CSV import
 - Map columns to Linear's fields (Title, Description, Project, Labels)
 
 ### Jira
+
 - Use Jira's CSV import tool
 - Map: Title → Summary, Description → Description, Milestone → Epic, Labels → Labels
 
