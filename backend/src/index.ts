@@ -1,5 +1,7 @@
+import 'dotenv/config'
 import { Hono } from 'hono'
 import { serve } from '@hono/node-server'
+import { testConnection } from './db'
 
 const app = new Hono()
 
@@ -13,6 +15,8 @@ app.get('/health', (c) => {
     timestamp: new Date().toISOString(),
   })
 })
+
+await testConnection();
 
 const port = 3000
 console.log(`🚀 Server is running on http://localhost:${port}`)
