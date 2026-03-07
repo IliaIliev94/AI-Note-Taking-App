@@ -21,17 +21,20 @@ A modern note-taking application with AI features including summarization, auto-
 ### Installation
 
 1. Clone the repository
+
 ```bash
 git clone <your-repo-url>
 cd AI-Note-Taking-App
 ```
 
 2. Start the database
+
 ```bash
 docker compose up -d
 ```
 
 3. Install and run the backend
+
 ```bash
 cd backend
 pnpm install
@@ -39,6 +42,7 @@ pnpm dev
 ```
 
 4. Install and run the frontend
+
 ```bash
 cd frontend
 pnpm install
@@ -48,6 +52,7 @@ pnpm dev
 ### Environment Variables
 
 Create `.env` in the backend directory:
+
 ```
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/notesync
 CLAUDE_API_KEY=your_key_here
@@ -56,6 +61,7 @@ REFRESH_TOKEN_SECRET=your_secret_here
 ```
 
 ## Project Structure
+
 ```
 AI-Note-Taking-App/
 ├── frontend/          # React frontend
