@@ -20,7 +20,7 @@ auth.post('/register', zValidator('json', schema), async (c) => {
     where: eq(users.email, data.email),
   })
   if (existingUser) {
-    return c.json({ error: 'User with same email already exists' }, 404)
+    return c.json({ error: 'User with same email already exists' }, 400)
   }
   const hashedPassword = await bcrypt.hash(data.password, 12)
   const user = await db
