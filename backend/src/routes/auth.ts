@@ -8,7 +8,8 @@ import { users } from '../db/schema'
 import jwt from 'jsonwebtoken'
 import 'dotenv/config'
 import { config } from '../config'
-import { setCookie } from 'hono/cookie'
+import { getCookie, setCookie } from 'hono/cookie'
+import crypto from 'crypto'
 
 const schema = z.object({
   name: z.string().optional(),
@@ -68,6 +69,15 @@ auth.post('/login', zValidator('json', schema), async (c) => {
     config.jwt.refreshSecret,
     { expiresIn: config.jwt.refreshExpiry }
   )
+  const tokenHash = crypto
+    .createHash('sha256')
+    .update(refreshToken)
+    .digest('hex')
+  await db.insert(refreshTokens).values({
+    userId: existingUser.id,
+    tokenHash: tokenHash,
+    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+  })
   setCookie(c, 'access_token', accessToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
