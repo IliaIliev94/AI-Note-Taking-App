@@ -3,8 +3,8 @@ import { Hono } from 'hono'
 import z, { email } from 'zod'
 import bcrypt from 'bcrypt'
 import db from '../db'
-import { eq } from 'drizzle-orm'
-import { users } from '../db/schema'
+import { and, eq, gt, isNull } from 'drizzle-orm'
+import { refreshTokens, users } from '../db/schema'
 import jwt from 'jsonwebtoken'
 import 'dotenv/config'
 import { config } from '../config'
@@ -51,6 +51,7 @@ auth.post('/login', zValidator('json', schema), async (c) => {
   if (!existingUser) {
     return c.json({ error: 'No user exists with that email' }, 400)
   }
+
   const isMatch = await bcrypt.compare(data.password, existingUser.passwordHash)
   if (!isMatch) {
     return c.json({ error: 'Incorrect login credentials' }, 400)
@@ -78,6 +79,7 @@ auth.post('/login', zValidator('json', schema), async (c) => {
     tokenHash: tokenHash,
     expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
   })
+
   setCookie(c, 'access_token', accessToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
@@ -96,6 +98,81 @@ auth.post('/login', zValidator('json', schema), async (c) => {
     message: 'Login successful',
     user: { name: existingUser.name, email: existingUser.email },
   })
+})
+
+auth.post('/refresh', async (c) => {
+  const refreshToken = getCookie(c, 'refresh_token')
+  if (!refreshToken) {
+    return c.json(
+      { error: 'Invalid request! Refresh token not passed in cookies' },
+      401
+    )
+  }
+  try {
+    const payload = jwt.verify(refreshToken, config.jwt.refreshSecret) as {
+      sub: string
+    }
+    const tokenHash = crypto
+      .createHash('sha256')
+      .update(refreshToken)
+      .digest('hex')
+
+    const storedToken = await db.query.refreshTokens.findFirst({
+      where: and(
+        eq(refreshTokens.tokenHash, tokenHash),
+        eq(refreshTokens.userId, payload.sub),
+        isNull(refreshTokens.revokedAt),
+        gt(refreshTokens.expiresAt, new Date())
+      ),
+    })
+    if (!storedToken) {
+      return c.json({ error: 'Token has expired or is invalid' }, 401)
+    }
+    const accessToken = jwt.sign(
+      {
+        sub: storedToken.userId,
+      },
+      config.jwt.accessSecret,
+      { expiresIn: config.jwt.accessExpiry }
+    )
+    const newRefreshToken = jwt.sign(
+      {
+        sub: storedToken.userId,
+      },
+      config.jwt.refreshSecret,
+      { expiresIn: config.jwt.refreshExpiry }
+    )
+    const newRefreshTokenHash = crypto
+      .createHash('sha256')
+      .update(newRefreshToken)
+      .digest('hex')
+    await db.insert(refreshTokens).values({
+      userId: payload.sub,
+      tokenHash: newRefreshTokenHash,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    })
+    await db
+      .update(refreshTokens)
+      .set({ revokedAt: new Date() })
+      .where(eq(refreshTokens.tokenHash, tokenHash))
+    setCookie(c, 'access_token', accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'Lax',
+      maxAge: 60 * 15,
+      path: '/',
+    })
+    setCookie(c, 'refresh_token', newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'Lax',
+      maxAge: 60 * 60 * 24 * 7,
+      path: '/',
+    })
+    return c.text('', 200)
+  } catch (error) {
+    return c.json({ error: 'Invalid refresh token' }, 400)
+  }
 })
 
 export default auth
