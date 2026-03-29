@@ -77,21 +77,21 @@ auth.post('/login', zValidator('json', schema), async (c) => {
   await db.insert(refreshTokens).values({
     userId: existingUser.id,
     tokenHash: tokenHash,
-    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+    expiresAt: new Date(Date.now() + config.jwt.refreshExpiryNumerical * 1000), // 7 days
   })
 
   setCookie(c, 'access_token', accessToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'Lax',
-    maxAge: 60 * 15,
+    maxAge: config.jwt.accessExpiryNumerical,
     path: '/',
   })
   setCookie(c, 'refresh_token', refreshToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'Lax',
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: config.jwt.refreshExpiryNumerical,
     path: '/',
   })
   return c.json({
@@ -149,7 +149,9 @@ auth.post('/refresh', async (c) => {
     await db.insert(refreshTokens).values({
       userId: payload.sub,
       tokenHash: newRefreshTokenHash,
-      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      expiresAt: new Date(
+        Date.now() + config.jwt.refreshExpiryNumerical * 1000
+      ),
     })
     await db
       .update(refreshTokens)
@@ -159,14 +161,14 @@ auth.post('/refresh', async (c) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'Lax',
-      maxAge: 60 * 15,
+      maxAge: config.jwt.accessExpiryNumerical,
       path: '/',
     })
     setCookie(c, 'refresh_token', newRefreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'Lax',
-      maxAge: 60 * 60 * 24 * 7,
+      maxAge: config.jwt.refreshExpiryNumerical,
       path: '/',
     })
     return c.text('', 200)

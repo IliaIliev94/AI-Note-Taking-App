@@ -14,5 +14,7 @@ export const config = {
     refreshSecret: getEnvVar('REFRESH_TOKEN_SECRET'),
     accessExpiry: '15m' as const,
     refreshExpiry: '7d' as const,
+    accessExpiryNumerical: 60 * 15,
+    refreshExpiryNumerical: 60 * 60 * 24 * 7,
   },
 }
