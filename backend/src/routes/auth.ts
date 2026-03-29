@@ -1,5 +1,5 @@
 import { zValidator } from '@hono/zod-validator'
-import { Hono } from 'hono'
+import { Context, Hono } from 'hono'
 import z, { email } from 'zod'
 import bcrypt from 'bcrypt'
 import db from '../db'
@@ -79,21 +79,7 @@ auth.post('/login', zValidator('json', schema), async (c) => {
     tokenHash: tokenHash,
     expiresAt: new Date(Date.now() + config.jwt.refreshExpiryNumerical * 1000), // 7 days
   })
-
-  setCookie(c, 'access_token', accessToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'Lax',
-    maxAge: config.jwt.accessExpiryNumerical,
-    path: '/',
-  })
-  setCookie(c, 'refresh_token', refreshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'Lax',
-    maxAge: config.jwt.refreshExpiryNumerical,
-    path: '/',
-  })
+  setTokenCookies({ c, accessToken, refreshToken })
   return c.json({
     message: 'Login successful',
     user: { name: existingUser.name, email: existingUser.email },
@@ -157,24 +143,37 @@ auth.post('/refresh', async (c) => {
       .update(refreshTokens)
       .set({ revokedAt: new Date() })
       .where(eq(refreshTokens.tokenHash, tokenHash))
-    setCookie(c, 'access_token', accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Lax',
-      maxAge: config.jwt.accessExpiryNumerical,
-      path: '/',
-    })
-    setCookie(c, 'refresh_token', newRefreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Lax',
-      maxAge: config.jwt.refreshExpiryNumerical,
-      path: '/',
-    })
+    setTokenCookies({ c, accessToken, refreshToken })
     return c.text('', 200)
   } catch (error) {
     return c.json({ error: 'Invalid refresh token' }, 400)
   }
 })
+
+function setTokenCookies({
+  c,
+  accessToken,
+  refreshToken,
+}: {
+  c: Context
+  accessToken: string
+  refreshToken: string
+}) {
+  const isProductionConfig = process.env.NODE_ENV === 'production'
+  setCookie(c, 'access_token', accessToken, {
+    httpOnly: true,
+    secure: isProductionConfig,
+    sameSite: 'Lax',
+    maxAge: config.jwt.accessExpiryNumerical,
+    path: '/',
+  })
+  setCookie(c, 'refresh_token', refreshToken, {
+    httpOnly: true,
+    secure: isProductionConfig,
+    sameSite: 'Lax',
+    maxAge: config.jwt.refreshExpiryNumerical,
+    path: '/',
+  })
+}
 
 export default auth
